@@ -90,8 +90,11 @@
 		var rect = canvas.getBoundingClientRect(),
 			root = document.documentElement,
 			mouseX = event.clientX - rect.left - root.scrollLeft,
-			mouseY = event.clientY - rect.top - root.scrollTop;
+			mouseY = event.clientY - rect.top - root.scrollTop,
+			newAction = detectAction(mouseX, mouseY);
 
-		selectedAction = detectAction(mouseX, mouseY);
+		if (newAction !== null) {
+			selectedAction = newAction;
+		}
 	};
 })();
