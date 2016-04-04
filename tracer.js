@@ -1,7 +1,11 @@
 (function () {
 	var canvas = document.getElementById('myCanvas'),
 		canvasContext = canvas.getContext('2d'),
-		grid, lights = [];
+		grid, lights = [],
+		colorDark = 'black';
+		colorVisible = 'white';
+		colorLight = 'yellow';
+		colorObstacle = 'red';
 
 	function createGrid (width, height) {
 		var grid = {width: width, height: height, elements: []}, x, y;
@@ -41,17 +45,17 @@
 		cellWidth = canvasWidth / grid.width;
 		cellHeight = canvasHeight / grid.height;
 		for (i = 0; i < grid.height * grid.width; i++) {
-			var color = 'black';
+			var color = colorDark;
 			cell = grid.elements[i];
 			if (cell.isLight) {
-				color = 'yellow';
+				color = colorLight;
 			}
 			else if (cell.isVisible) {
 				if (cell.isObstacle) {
-					color = 'red';
+					color = colorObstacle;
 				}
 				else {
-					color = 'white';
+					color = colorVisible;
 				}
 			}
 			canvasContext.fillStyle = color;
