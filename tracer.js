@@ -88,6 +88,27 @@
 		return actions[0 | (y / 20)];
 	}
 
+	function detectClickedCell (x, y) {
+		if (x < 0 || x > canvas.width - 20 || y < 0 || y > canvas.height) {
+			return null;
+		}
+
+		x = 0 | (x / cellWidth);
+		y = 0 | (y / cellHeight);
+		return y * grid.width + x;
+	}
+
+	function alterCell (affectedCellIndex) {
+		if (selectedAction == 'light') {
+			grid.elements[affectedCellIndex].isLight = true;
+			grid.elements[affectedCellIndex].isObstacle = false;
+		}
+		else if (selectedAction == 'obstacle') {
+			grid.elements[affectedCellIndex].isLight = false;
+			grid.elements[affectedCellIndex].isObstacle = true;
+		}
+	}
+
 	grid = createGrid(50, 50);
 	setGridCellSize();
 	mainLoop();
@@ -97,10 +118,14 @@
 			root = document.documentElement,
 			mouseX = event.clientX - rect.left - root.scrollLeft,
 			mouseY = event.clientY - rect.top - root.scrollTop,
-			newAction = detectAction(mouseX, mouseY);
+			newAction = detectAction(mouseX, mouseY),
+			affectedCellIndex = detectClickedCell(mouseX, mouseY);
 
 		if (newAction !== null) {
 			selectedAction = newAction;
+		}
+		else if (affectedCellIndex !== null) {
+			alterCell(affectedCellIndex);
 		}
 	};
 })();
