@@ -1,13 +1,22 @@
 (function () {
 	var canvas = document.getElementById('myCanvas'),
 		canvasContext = canvas.getContext('2d'),
-		grid, lights = [],
+		grid, cellWidth, cellHeight, lights = [],
 		colorDark = 'black';
 		colorVisible = 'white';
 		colorLight = 'yellow';
 		colorObstacle = 'red',
 		actions = ['light', 'obstacle'],
 		selectedAction = 'light';
+
+	function setGridCellSize () {
+		var canvasWidth, canvasHeight;
+		canvasWidth = canvas.width - 20;
+		canvasHeight = canvas.height;
+
+		cellWidth = canvasWidth / grid.width;
+		cellHeight = canvasHeight / grid.height;
+	}
 
 	function createGrid (width, height) {
 		var grid = {width: width, height: height, elements: []}, x, y;
@@ -34,12 +43,8 @@
 	}
 
 	function drawGrid (grid) {
-		var canvasWidth, canvasHeight, i, cellWidth, cellHeight, cell;
-		canvasWidth = canvas.width - 20;
-		canvasHeight = canvas.height;
+		var i, cell;
 
-		cellWidth = canvasWidth / grid.width;
-		cellHeight = canvasHeight / grid.height;
 		for (i = 0; i < grid.height * grid.width; i++) {
 			var color = colorDark;
 			cell = grid.elements[i];
@@ -84,6 +89,7 @@
 	}
 
 	grid = createGrid(50, 50);
+	setGridCellSize();
 	mainLoop();
 
 	canvas.onclick = function (event) {
