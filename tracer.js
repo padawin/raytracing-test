@@ -1,13 +1,22 @@
 (function () {
 	var canvas = document.getElementById('myCanvas'),
 		canvasContext = canvas.getContext('2d'),
-		grid, lights = [],
+		grid, cellWidth, cellHeight, lights = [],
 		colorDark = 'black';
 		colorVisible = 'white';
 		colorLight = 'yellow';
 		colorObstacle = 'red',
 		actions = ['light', 'obstacle'],
 		selectedAction = 'light';
+
+	function setGridCellSize () {
+		var canvasWidth, canvasHeight;
+		canvasWidth = canvas.width - 20;
+		canvasHeight = canvas.height;
+
+		cellWidth = canvasWidth / grid.width;
+		cellHeight = canvasHeight / grid.height;
+	}
 
 	function createGrid (width, height) {
 		var grid = {width: width, height: height, elements: []}, x, y;
@@ -34,12 +43,8 @@
 	}
 
 	function drawGrid (grid) {
-		var canvasWidth, canvasHeight, i, cellWidth, cellHeight, cell;
-		canvasWidth = canvas.width - 20;
-		canvasHeight = canvas.height;
+		var i, cell;
 
-		cellWidth = canvasWidth / grid.width;
-		cellHeight = canvasHeight / grid.height;
 		for (i = 0; i < grid.height * grid.width; i++) {
 			var color = colorDark;
 			cell = grid.elements[i];
@@ -83,15 +88,44 @@
 		return actions[0 | (y / 20)];
 	}
 
+	function detectClickedCell (x, y) {
+		if (x < 0 || x > canvas.width - 20 || y < 0 || y > canvas.height) {
+			return null;
+		}
+
+		x = 0 | (x / cellWidth);
+		y = 0 | (y / cellHeight);
+		return y * grid.width + x;
+	}
+
+	function alterCell (affectedCellIndex) {
+		if (selectedAction == 'light') {
+			grid.elements[affectedCellIndex].isLight = true;
+			grid.elements[affectedCellIndex].isObstacle = false;
+		}
+		else if (selectedAction == 'obstacle') {
+			grid.elements[affectedCellIndex].isLight = false;
+			grid.elements[affectedCellIndex].isObstacle = true;
+		}
+	}
+
 	grid = createGrid(50, 50);
+	setGridCellSize();
 	mainLoop();
 
 	canvas.onclick = function (event) {
 		var rect = canvas.getBoundingClientRect(),
 			root = document.documentElement,
 			mouseX = event.clientX - rect.left - root.scrollLeft,
-			mouseY = event.clientY - rect.top - root.scrollTop;
+			mouseY = event.clientY - rect.top - root.scrollTop,
+			newAction = detectAction(mouseX, mouseY),
+			affectedCellIndex = detectClickedCell(mouseX, mouseY);
 
-		selectedAction = detectAction(mouseX, mouseY);
+		if (newAction !== null) {
+			selectedAction = newAction;
+		}
+		else if (affectedCellIndex !== null) {
+			alterCell(affectedCellIndex);
+		}
 	};
 })();
