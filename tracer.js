@@ -28,7 +28,7 @@
 	function mainLoop () {
 		requestAnimationFrame(mainLoop);
 		drawGrid(grid);
-
+		drawControls(canvas.width > canvas.height ? 'right' : 'bottom');
 	}
 
 	function drawGrid (grid) {
@@ -65,6 +65,24 @@
 				cellWidth,
 				cellWidth
 			);
+		}
+	}
+
+	function drawControls (position) {
+		switch (position) {
+			case 'right':
+				canvasContext.fillStyle = colorLight;
+				canvasContext.fillRect(canvas.width - 20, 0, 20, 20);
+				canvasContext.fillStyle = colorObstacle;
+				canvasContext.fillRect(canvas.width - 20, 20, 20, 20);
+				break;
+			case 'bottom':
+				canvasContext.fillStyle = colorLight;
+				canvasContext.fillRect(0, canvas.height - 20, 20, 20);
+				canvasContext.fillStyle = colorObstacle;
+				canvasContext.fillRect(20, canvas.height - 20, 20, 20);
+			default:
+
 		}
 	}
 
