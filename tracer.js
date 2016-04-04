@@ -28,7 +28,8 @@
 					y: y,
 					isLight: false,
 					isVisible: false,
-					isObstacle: false
+					isObstacle: false,
+					lightIndex: null
 				});
 			}
 		}
@@ -102,10 +103,17 @@
 		if (selectedAction == 'light') {
 			grid.elements[affectedCellIndex].isLight = true;
 			grid.elements[affectedCellIndex].isObstacle = false;
+			lights.push(affectedCellIndex);
+			grid.elements[affectedCellIndex].lightIndex = lights.length - 1;
 		}
 		else if (selectedAction == 'obstacle') {
 			grid.elements[affectedCellIndex].isLight = false;
 			grid.elements[affectedCellIndex].isObstacle = true;
+
+			if (grid.elements[affectedCellIndex].lightIndex !== null) {
+				lights.splice(grid.elements[affectedCellIndex].lightIndex, 1);
+				grid.elements[affectedCellIndex].lightIndex = null;
+			}
 		}
 	}
 
