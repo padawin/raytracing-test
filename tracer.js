@@ -28,7 +28,7 @@
 	}
 
 	function drawGrid (grid) {
-		var canvasWidth, canvasHeight;
+		var canvasWidth, canvasHeight, i, cellWidth, cellHeight, cell;
 		if (canvas.width > canvas.height) {
 			canvasWidth = canvas.width - 20;
 			canvasHeight = canvas.height;
@@ -37,9 +37,9 @@
 			canvasWidth = canvas.width;
 			canvasHeight = canvas.height - 20;
 		}
-		var i, cellWidth = canvasWidth / grid.width,
-			cellHeight = canvasHeight / grid.height,
-			cell;
+
+		cellWidth = canvasWidth / grid.width;
+		cellHeight = canvasHeight / grid.height;
 		for (i = 0; i < grid.height * grid.width; i++) {
 			var color = 'black';
 			cell = grid.elements[i];
