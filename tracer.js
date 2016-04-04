@@ -5,7 +5,9 @@
 		colorDark = 'black';
 		colorVisible = 'white';
 		colorLight = 'yellow';
-		colorObstacle = 'red';
+		colorObstacle = 'red',
+		actions = ['light', 'obstacle'],
+		selectedAction = 'light';
 
 	function createGrid (width, height) {
 		var grid = {width: width, height: height, elements: []}, x, y;
@@ -67,11 +69,29 @@
 		canvasContext.fillRect(canvas.width - 20, 0, 20, 20);
 		canvasContext.fillStyle = colorObstacle;
 		canvasContext.fillRect(canvas.width - 20, 20, 20, 20);
+		canvasContext.fillStyle = selectedAction == 'light' ? colorLight : colorObstacle;
+		canvasContext.fillRect(canvas.width - 20, 40, 20, 20);
+		canvasContext.strokeStyle = 'black';
+		canvasContext.strokeRect(canvas.width - 20, 40, 20, 20);
 	}
 
+	function detectAction (x, y) {
+		if (x < canvas.width - 20 || x > canvas.width || y < 0 || y > actions.length * 20) {
+			return null;
 		}
+
+		return actions[0 | (y / 20)];
 	}
 
 	grid = createGrid(50, 50);
 	mainLoop();
+
+	canvas.onclick = function (event) {
+		var rect = canvas.getBoundingClientRect(),
+			root = document.documentElement,
+			mouseX = event.clientX - rect.left - root.scrollLeft,
+			mouseY = event.clientY - rect.top - root.scrollTop;
+
+		selectedAction = detectAction(mouseX, mouseY);
+	};
 })();
