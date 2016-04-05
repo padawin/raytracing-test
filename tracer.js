@@ -115,6 +115,12 @@
 				grid.elements[affectedCellIndex].lightIndex = null;
 			}
 		}
+
+		spreadLight();
+	}
+
+	function spreadLight () {
+		
 	}
 
 	grid = createGrid(50, 50);
