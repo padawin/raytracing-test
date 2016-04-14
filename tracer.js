@@ -111,13 +111,11 @@
 				grid.elements[affectedCellIndex].lightIndex = null;
 			}
 		}
+
+		drawGrid(grid);
 	}
 
 	function makeCellVisible (x, y) {
-		if (x < 0 || x >= grid.width || y < 0 || y >= grid.height) {
-			return;
-		}
-
 		var cellIndex = y * grid.width + x, color = colorVisible;
 		if (grid.elements[cellIndex].isObstacle) {
 			color = colorObstacle;
@@ -203,9 +201,17 @@
 		return grid.elements[cellIndex].isObstacle;
 	}
 
+	function isInGrid (x, y) {
+		return (x >= 0 && x < grid.width && y >= 0 && y < grid.height);
+	}
+
 	function drawLine (line, start, end) {
 		if (line[0].x == end.x && line[0].y == end.y) {
 			for (var i = line.length - 1; i >= 0; i--) {
+				if (!isInGrid(line[i].x, line[i].y)) {
+					break;
+				}
+
 				makeCellVisible(line[i].x, line[i].y);
 				if (isObstacle(line[i].x, line[i].y)) {
 					break;
@@ -214,6 +220,10 @@
 		}
 		else {
 			for (var i = 0; i < line.length; i++) {
+				if (!isInGrid(line[i].x, line[i].y)) {
+					break;
+				}
+
 				makeCellVisible(line[i].x, line[i].y);
 				if (isObstacle(line[i].x, line[i].y)) {
 					break;
