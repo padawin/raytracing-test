@@ -232,11 +232,6 @@
 		}
 	}
 
-	grid = createGrid(50, 50);
-	setGridCellSize();
-	drawGrid(grid);
-	drawControls();
-
 	canvas.onclick = function (event) {
 		var rect = canvas.getBoundingClientRect(),
 			root = document.documentElement,
@@ -270,4 +265,17 @@
 			mouseLight = null;
 		}
 	};
+
+	window.addEventListener('resize', resizeCanvas, false);
+
+	function resizeCanvas() {
+		canvas.width = window.innerWidth;
+		canvas.height = window.innerHeight;
+
+		grid = createGrid(50, 50);
+		setGridCellSize();
+		drawGrid(grid);
+		drawControls();
+	}
+	resizeCanvas();
 })();
