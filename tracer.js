@@ -43,6 +43,22 @@
 		drawControls();
 	}
 
+	function colorCell (color, cell) {
+		var x = 0,
+			y = 0,
+			w = cellWidth * grid.width,
+			h = cellHeight * grid.height;
+		if (cell != null) {
+			x = cell.x * cellWidth;
+			y = cell.y * cellHeight;
+			w = cellWidth;
+			h = cellHeight;
+		}
+
+		canvasContext.fillStyle = color;
+		canvasContext.fillRect(x, y, w, h);
+	}
+
 	function drawGrid (grid) {
 		var i, cell;
 
