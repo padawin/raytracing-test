@@ -8,7 +8,7 @@
 		colorObstacle = 'red',
 		actions = ['light', 'obstacle'],
 		selectedAction = 'light',
-		radius = 7,
+		radius = 12,
 		mouseLight = null;
 
 	function setGridCellSize () {
@@ -272,7 +272,7 @@
 		canvas.width = window.innerWidth;
 		canvas.height = window.innerHeight;
 
-		grid = createGrid(50, 50);
+		grid = createGrid(100, 100);
 		setGridCellSize();
 		drawGrid(grid);
 		drawControls();
