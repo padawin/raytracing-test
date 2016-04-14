@@ -1,4 +1,4 @@
-# Raytracer test
+# Raytracing test
 
 You have a grid, all dark. You have some tools: lights (yellow) and
 obstacles (red). Select your tool on the right, the 3rd color is the
