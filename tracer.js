@@ -8,7 +8,8 @@
 		colorObstacle = 'red',
 		actions = ['light', 'obstacle'],
 		selectedAction = 'light',
-		radius = 7;
+		radius = 7,
+		mouseLight = null;
 
 	function setGridCellSize () {
 		var canvasWidth, canvasHeight;
@@ -139,6 +140,10 @@
 			light = grid.elements[lights[i]];
 			s(light);
 		}
+
+		if (mouseLight != null) {
+			s(mouseLight);
+		}
 	}
 
 	function getLine (start, end) {
@@ -247,6 +252,22 @@
 		else if (affectedCellIndex !== null) {
 			alterCell(affectedCellIndex);
 			drawGrid(grid);
+		}
+	};
+	canvas.onmousemove = function (event) {
+		var rect = canvas.getBoundingClientRect(),
+			root = document.documentElement;
+
+		coordinatesX = event.clientX - rect.left - root.scrollLeft;
+		coordinatesY = event.clientY - rect.top - root.scrollTop;
+
+		cellIndex = detectClickedCell(coordinatesX, coordinatesY);
+		if (cellIndex != null && grid.elements[cellIndex] != mouseLight) {
+			mouseLight = grid.elements[cellIndex];
+			drawGrid(grid);
+		}
+		else {
+			mouseLight = null;
 		}
 	};
 })();
