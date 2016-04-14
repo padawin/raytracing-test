@@ -104,8 +104,6 @@
 				grid.elements[affectedCellIndex].lightIndex = null;
 			}
 		}
-
-		drawGrid(grid);
 	}
 
 	function makeCellVisible (x, y) {
@@ -240,9 +238,11 @@
 
 		if (newAction !== null) {
 			selectedAction = newAction;
+			drawControls();
 		}
 		else if (affectedCellIndex !== null) {
 			alterCell(affectedCellIndex);
+			drawGrid(grid);
 		}
 	};
 })();
