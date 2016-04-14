@@ -119,6 +119,11 @@
 		spreadLight();
 	}
 
+	function makeCellVisible (x, y) {
+		var cellIndex = y * grid.width + x;
+		grid.elements[cellIndex].isVisible = true;
+	}
+
 	function spreadLight () {
 		
 	}
