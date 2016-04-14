@@ -125,7 +125,47 @@
 	}
 
 	function spreadLight () {
-		
+		var i, nbLights = lights.length;
+
+		if (nbLights < 2) {
+			return;
+		}
+
+		for (i = 0; i < nbLights - 1; i++) {
+			drawLine(grid.elements[lights[i]], grid.elements[lights[i + 1]]);
+		}
+
+		if (nbLights > 2) {
+			drawLine(grid.elements[lights[nbLights - 1]], grid.elements[lights[0]]);
+		}
+	}
+
+	function drawLine (start, end) {
+		var x0 = start.x,
+			y0 = start.y,
+			x1 = end.x,
+			y1 = end.y,
+			deltaX = x1 - x0,
+			deltaY = y1 - y0,
+			error = 0,
+			// Assume deltax != 0 (line is not vertical),
+			deltaErr = Math.abs(deltaY / deltaX),
+
+			y = y0;
+
+		function sign (n) {
+			return n < 0 ? -1 : 1;
+		}
+
+		makeCellVisible(x0, y0);
+		for (var x = x0; x < x1; x++) {
+			error = error + deltaErr;
+			while (error >= 0.5) {
+				y = y + sign(y1 - y0);
+				error = error - 1.0;
+				makeCellVisible(x, y);
+			}
+		}
 	}
 
 	grid = createGrid(50, 50);
