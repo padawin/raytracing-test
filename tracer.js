@@ -141,7 +141,7 @@
 				for (y = light.y - radius; y <= light.y + radius; y++) {
 					dest = {x:x, y:y};
 					if (distance(light, dest) <= radius) {
-						drawLine(getLine(light, dest));
+						drawLine(getLine(light, dest), light, dest);
 					}
 				}
 			}
@@ -198,9 +198,27 @@
 		return pts;
 	}
 
-	function drawLine (line) {
-		for (var i = 0; i < line.length; i++) {
-			makeCellVisible(line[i].x, line[i].y);
+	function isObstacle (x, y) {
+		var cellIndex = y * grid.width + x;
+		return grid.elements[cellIndex].isObstacle;
+	}
+
+	function drawLine (line, start, end) {
+		if (line[0].x == end.x && line[0].y == end.y) {
+			for (var i = line.length - 1; i >= 0; i--) {
+				makeCellVisible(line[i].x, line[i].y);
+				if (isObstacle(line[i].x, line[i].y)) {
+					break;
+				}
+			}
+		}
+		else {
+			for (var i = 0; i < line.length; i++) {
+				makeCellVisible(line[i].x, line[i].y);
+				if (isObstacle(line[i].x, line[i].y)) {
+					break;
+				}
+			}
 		}
 	}
 
