@@ -122,10 +122,10 @@
 	}
 
 	function spreadLight () {
-		var i, x, y, nbLights = lights.length, light, dest;
+		var i, nbLights = lights.length, light, dest;
 
-		for (i = 0; i < nbLights; i++) {
-			light = grid.elements[lights[i]];
+		function s (light) {
+			var x, y;
 			for (x = light.x - radius; x <= light.x + radius; x++) {
 				for (y = light.y - radius; y <= light.y + radius; y++) {
 					dest = {x:x, y:y};
@@ -134,6 +134,10 @@
 					}
 				}
 			}
+		}
+		for (i = 0; i < nbLights; i++) {
+			light = grid.elements[lights[i]];
+			s(light);
 		}
 	}
 
