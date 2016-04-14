@@ -127,39 +127,77 @@
 		var i, nbLights = lights.length;
 
 		for (i = 0; i < nbLights - 1; i++) {
-			drawLine(grid.elements[lights[i]], grid.elements[lights[i + 1]]);
+			drawLine(
+				getLine(
+					grid.elements[lights[i]],
+					grid.elements[lights[i + 1]]
+				)
+			);
 		}
 
 		if (nbLights > 2) {
-			drawLine(grid.elements[lights[nbLights - 1]], grid.elements[lights[0]]);
+			drawLine(
+				getLine(
+					grid.elements[lights[nbLights - 1]],
+					grid.elements[lights[0]]
+				)
+			);
 		}
 	}
 
-	function drawLine (start, end) {
-		var x0 = start.x,
-			y0 = start.y,
-			x1 = end.x,
-			y1 = end.y,
-			deltaX = x1 - x0,
-			deltaY = y1 - y0,
-			error = 0,
-			// Assume deltax != 0 (line is not vertical),
-			deltaErr = Math.abs(deltaY / deltaX),
+	function getLine (start, end) {
+		var x0 = start.x, x1 = end.x, y0 = start.y, y1 = end.y,
+			pts = [],
+			swapXY = Math.abs( y1 - y0 ) > Math.abs( x1 - x0 ),
+			tmp,
+			deltaX, deltaY, error, y, ySign;
 
-			y = y0;
-
-		function sign (n) {
-			return n < 0 ? -1 : 1;
+		if (swapXY) {
+			// swap x and y
+			tmp = x0; x0 = y0; y0 = tmp; // swap x0 and y0
+			tmp = x1; x1 = y1; y1 = tmp; // swap x1 and y1
 		}
 
-		makeCellVisible(x0, y0);
-		for (var x = x0; x < x1; x++) {
-			error = error + deltaErr;
-			while (error >= 0.5) {
-				y = y + sign(y1 - y0);
-				error = error - 1.0;
-				makeCellVisible(x, y);
+		if (x0 > x1) {
+			// make sure x0 < x1
+			tmp = x0; x0 = x1; x1 = tmp; // swap x0 and x1
+			tmp = y0; y0 = y1; y1 = tmp; // swap y0 and y1
+		}
+
+		deltaX = x1 - x0;
+		deltaY = Math.floor( Math.abs( y1 - y0 ) );
+		error = Math.floor( deltaX / 2 );
+		y = y0;
+		ySign = ( y0 < y1 ) ? 1 : -1;
+
+		if (swapXY) {
+			// Y / X
+			for (var x = x0; x < x1 + 1; x++) {
+				pts.push({x:y, y:x});
+				error -= deltaY;
+				if ( error < 0 ) {
+					y = y + ySign;
+					error = error + deltaX;
+				}
 			}
+		}
+		else {
+			// X / Y
+			for (var x = x0; x < x1 + 1; x++) {
+				pts.push({x:x, y:y});
+				error -= deltaY;
+				if ( error < 0 ) {
+					y = y + ySign;
+					error = error + deltaX;
+				}
+			}
+		}
+		return pts;
+	}
+
+	function drawLine (line) {
+		for (var i = 0; i < line.length; i++) {
+			makeCellVisible(line[i].x, line[i].y);
 		}
 	}
 
