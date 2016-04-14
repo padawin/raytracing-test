@@ -37,12 +37,6 @@
 		return grid;
 	}
 
-	function mainLoop () {
-		requestAnimationFrame(mainLoop);
-		drawGrid(grid);
-		drawControls();
-	}
-
 	function colorCell (color, cell) {
 		var x = 0,
 			y = 0,
@@ -61,7 +55,6 @@
 
 	function drawGrid (grid) {
 		var i, cell, nbLights = lights.length;
-
 		colorCell(colorDark);
 		spreadLight();
 	}
@@ -234,7 +227,8 @@
 
 	grid = createGrid(50, 50);
 	setGridCellSize();
-	mainLoop();
+	drawGrid(grid);
+	drawControls();
 
 	canvas.onclick = function (event) {
 		var rect = canvas.getBoundingClientRect(),
