@@ -7,7 +7,8 @@
 		colorLight = 'yellow';
 		colorObstacle = 'red',
 		actions = ['light', 'obstacle'],
-		selectedAction = 'light';
+		selectedAction = 'light',
+		radius = 7;
 
 	function setGridCellSize () {
 		var canvasWidth, canvasHeight;
@@ -113,6 +114,10 @@
 	}
 
 	function makeCellVisible (x, y) {
+		if (x < 0 || x >= grid.width || y < 0 || y >= grid.height) {
+			return;
+		}
+
 		var cellIndex = y * grid.width + x, color = colorVisible;
 		if (grid.elements[cellIndex].isObstacle) {
 			color = colorObstacle;
@@ -123,25 +128,23 @@
 		colorCell(color, grid.elements[cellIndex]);
 	}
 
+	function distance (p1, p2) {
+		return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
+	}
+
 	function spreadLight () {
-		var i, nbLights = lights.length;
+		var i, x, y, nbLights = lights.length, light, dest;
 
-		for (i = 0; i < nbLights - 1; i++) {
-			drawLine(
-				getLine(
-					grid.elements[lights[i]],
-					grid.elements[lights[i + 1]]
-				)
-			);
-		}
-
-		if (nbLights > 2) {
-			drawLine(
-				getLine(
-					grid.elements[lights[nbLights - 1]],
-					grid.elements[lights[0]]
-				)
-			);
+		for (i = 0; i < nbLights; i++) {
+			light = grid.elements[lights[i]];
+			for (x = light.x - radius; x <= light.x + radius; x++) {
+				for (y = light.y - radius; y <= light.y + radius; y++) {
+					dest = {x:x, y:y};
+					if (distance(light, dest) <= radius) {
+						drawLine(getLine(light, dest));
+					}
+				}
+			}
 		}
 	}
 
