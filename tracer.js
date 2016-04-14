@@ -27,7 +27,6 @@
 					x: x,
 					y: y,
 					isLight: false,
-					isVisible: false,
 					isObstacle: false,
 					lightIndex: null
 				});
@@ -60,30 +59,10 @@
 	}
 
 	function drawGrid (grid) {
-		var i, cell;
+		var i, cell, nbLights = lights.length;
 
-		for (i = 0; i < grid.height * grid.width; i++) {
-			var color = colorDark;
-			cell = grid.elements[i];
-			if (cell.isLight) {
-				color = colorLight;
-			}
-			else if (cell.isVisible) {
-				if (cell.isObstacle) {
-					color = colorObstacle;
-				}
-				else {
-					color = colorVisible;
-				}
-			}
-			canvasContext.fillStyle = color;
-			canvasContext.fillRect(
-				cell.x * cellWidth,
-				cell.y * cellHeight,
-				cellWidth,
-				cellWidth
-			);
-		}
+		colorCell(colorDark);
+		spreadLight();
 	}
 
 	function drawControls () {
@@ -131,21 +110,21 @@
 				grid.elements[affectedCellIndex].lightIndex = null;
 			}
 		}
-
-		spreadLight();
 	}
 
 	function makeCellVisible (x, y) {
-		var cellIndex = y * grid.width + x;
-		grid.elements[cellIndex].isVisible = true;
+		var cellIndex = y * grid.width + x, color = colorVisible;
+		if (grid.elements[cellIndex].isObstacle) {
+			color = colorObstacle;
+		}
+		else if (grid.elements[cellIndex].isLight) {
+			color = colorLight
+		}
+		colorCell(color, grid.elements[cellIndex]);
 	}
 
 	function spreadLight () {
 		var i, nbLights = lights.length;
-
-		if (nbLights < 2) {
-			return;
-		}
 
 		for (i = 0; i < nbLights - 1; i++) {
 			drawLine(grid.elements[lights[i]], grid.elements[lights[i + 1]]);
