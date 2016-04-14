@@ -272,10 +272,11 @@
 		canvas.width = window.innerWidth;
 		canvas.height = window.innerHeight;
 
-		grid = createGrid(100, 100);
 		setGridCellSize();
 		drawGrid(grid);
 		drawControls();
 	}
+
+	grid = createGrid(100, 100);
 	resizeCanvas();
 })();
